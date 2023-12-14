@@ -1,0 +1,169 @@
+<template>
+  <div class="correctStep1">
+    <Form
+      ref="formItem"
+      :model="formItem"
+      :rules="ruleValidate"
+      :label-width="120"
+    >
+      <Card>
+        <FormItem
+          style="width: 100%; font-weight: bold; margin-bottom: 0px"
+          label="关联的公示名称"
+        >
+          <span style="color: #5070fa; font-size: 16px">{{ tenderTitle }}</span>
+        </FormItem>
+      </Card>
+      <Card style="margin-top: 10px">
+        <Row>
+          <Col :span="16">
+            <FormItem prop="noticeNumber" style="width: 100%" label="招标编号">
+              <Input
+                disabled
+                v-model="formItem.noticeNumber"
+                :maxlength="300"
+              />
+            </FormItem>
+          </Col>
+          <Col :span="8" style="margin-top: 6px">
+            <span>（招标人或代理机构发布公告所使用的编号）</span>
+          </Col>
+        </Row>
+        <FormItem prop="title" style="width: 100%" label="变更公示名称">
+          <Input v-model="formItem.title" :maxlength="300" show-word-limit />
+        </FormItem>
+        <FormItem style="width: 100%" label="变更公示内容" prop="content" :rules="{required: true,message:'公示内容不能为空！',trigger:'blur'}">
+          <tinymce-editor v-model="formItem.content"></tinymce-editor>
+        </FormItem>
+        <div class="center">
+          <Button
+            size="large"
+            type="primary"
+            :loading="subLoading"
+            @click="next('formItem')"
+            >保存，下一步</Button
+          >
+        </div>
+      </Card>
+    </Form>
+  </div>
+</template>
+
+<script>
+import TinymceEditor from "../../../my-components/xboot/tinymce";
+import { validateSpecial } from "@/libs/validate";
+import {
+  viewCanInfo,
+  changeCandidate,
+  getCanTenderList,
+  saveChangeCandidate,
+} from "@/api/publishApi";
+export default {
+  name: "correctStep1",
+  props: {
+    currentStep: {
+      type: Number,
+      default: 0,
+    },
+  },
+  components: {
+    TinymceEditor,
+  },
+  data() {
+    return {
+      subLoading: false,
+      tenderTitle: "",
+      formItem: {
+        noticeNumber: "",
+        title: "",
+        content: "",
+      },
+      ruleValidate: {
+        noticeNumber: [
+          { required: true, message: "招标编号不能为空！", trigger: "blur" },
+          { validator: validateSpecial, trigger: "blur" },
+          { max: 300, message: "编号长度不能超过300个字符！", trigger: "blur" },
+        ],
+        title: [
+          { required: true, message: "公示名称不能为空！", trigger: "blur" },
+          { validator: validateSpecial, trigger: "blur" },
+          {
+            max: 300,
+            message: "公示名称度不能超过300个字符！",
+            trigger: "blur",
+          },
+        ],
+        content: [
+          { required: true, message: "公示内容不能为空！", trigger: "blur" },
+          { validator: validateSpecial, trigger: "blur" },
+          {
+            max: 5000,
+            message: "公示内容度不能超过5000个字符！",
+            trigger: "blur",
+          },
+        ],
+      },
+      canInfo: {},
+    };
+  },
+  created() {
+    this.getView(this.$route.query.id);
+  },
+  activated() {
+    this.getView(this.$route.query.id);
+    if (this.getStore("editCorrectCan")) {
+      this.removeStore("editCorrectCan");
+    }
+  },
+  methods: {
+    getView(id) {
+      viewCanInfo(id).then((data) => {
+        if (data.success) {
+          this.canInfo = data.result;
+          if (this.canInfo.pid) {
+            viewCanInfo(this.canInfo.pid).then((item) => {
+              this.tenderTitle = item.result.title;
+            });
+          } else {
+            this.tenderTitle = this.canInfo.title;
+          }
+          this.formItem.noticeNumber = this.canInfo.noticeNumber;
+          this.formItem.content = this.canInfo.content;
+          this.formItem.title = this.canInfo.title;
+        }
+      });
+    },
+
+    next(name) {
+      let data = {
+        ...this.formItem,
+        id: this.$route.query.id,
+      };
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.subLoading = true;
+          saveChangeCandidate(data).then((res) => {
+            this.subLoading = false;
+            if (res.success) {
+              this.$emit("update:currentStep", 1);
+            }
+          });
+        }
+      });
+    },
+
+    routerEnv(name) {
+      this.$router.push({
+        name,
+      });
+    },
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.center {
+  text-align: center;
+  margin-top: 30px;
+}
+</style>

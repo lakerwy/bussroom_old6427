@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'iconfont';
+  src: url('../../../../../public/font/iconfont.eot');
+  src: url('../../../../../public/font/iconfont.eot?#iefix') format('embedded-opentype'), url('../../../../../public/font/iconfont.woff2') format('woff2'), url('../../../../../public/font/iconfont.woff') format('woff'), url('../../../../../public/font/iconfont.ttf') format('truetype'), url('../../../../../public/font/iconfont.svg#iconfont') format('svg');
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: top;
+  margin-right: 0.8em;
+  line-height: 20px;
+}
+.ivu-shrinkable-menu {
+  height: 100%;
+  width: 100%;
+}
+#shangwushi-menu {
+  background-color: #222d3a;
+}
+#shangwushi-menu > .ivu-menu {
+  margin-top: 20px;
+  background-color: #222d3a;
+}
+#shangwushi-menu .ivu-menu-item:hover,
+#shangwushi-menu .ivu-menu-submenu-title:hover {
+  color: #2d8cf0;
+}
+#shangwushi-menu .ivu-menu-opened {
+  background-color: #1a2027;
+}
+#shangwushi-menu .ivu-menu-opened .ivu-menu-submenu-title {
+  background-color: #1a2027;
+}
+#shangwushi-menu .ivu-menu-opened .ivu-menu-submenu-title:hover,
+#shangwushi-menu .ivu-menu-opened .ivu-menu-item:hover {
+  background: #363e4f !important;
+}
+#shangwushi-menu .ivu-menu-opened .ivu-menu-item-selected.ivu-menu-item.ivu-menu-item-active {
+  background-color: #2d8cf0 !important;
+  color: #fff;
+}
+#shangwushi-menu .ivu-menu-item-selected.ivu-menu-item.ivu-menu-item-active {
+  background-color: #2d8cf0;
+  color: #fff;
+}

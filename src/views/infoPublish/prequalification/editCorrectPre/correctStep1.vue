@@ -1,0 +1,204 @@
+<template>
+  <div class="correctStep1">
+    <Form
+      ref="formItem"
+      :model="formItem"
+      :rules="ruleValidate"
+      :label-width="120"
+    >
+      <Card>
+        <FormItem
+          style="width: 100%; font-weight: bold; margin-bottom: 0px"
+          label="关联的公告名称"
+        >
+          <span style="color: #5070fa; font-size: 16px">{{
+            aboutProject
+          }}</span>
+        </FormItem>
+      </Card>
+      <Card style="margin-top: 10px">
+        <Row>
+          <Col :span="16">
+            <FormItem prop="noticeNumber" style="width: 100%" label="招标编号">
+              <Input
+                v-model="formItem.noticeNumber"
+                disabled
+                :maxlength="300"
+              />
+            </FormItem>
+          </Col>
+          <Col :span="8" style="margin-top: 6px">
+            <span>（招标人或代理机构发布公告所使用的编号）</span>
+          </Col>
+        </Row>
+        <FormItem prop="title" style="width: 100%" label="变更公告名称">
+          <Input v-model="formItem.title" :maxlength="300" show-word-limit />
+        </FormItem>
+        <FormItem style="width: 100%" label="变更公告内容" prop="content" :rules="{required: true,message:'公告内容不能为空！',trigger:'blur'}">
+          <tinymce-editor v-model="formItem.content"></tinymce-editor>
+        </FormItem>
+        <FormItem style="width: 100%" label="是否延期开标" prop="isDelay">
+          <RadioGroup v-model="formItem.isDelay">
+            <Radio :label="1">是</Radio>
+            <Radio :label="0">否</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem prop="openBidTime" style="width: 100%" label="开标时间" v-if="formItem.isDelay">
+          <DatePicker
+            v-model="formItem.openBidTime"
+            type="datetime"
+            style="width: 220px"
+            transfer
+            format="yyyy-MM-dd HH:mm:ss"
+            :editable="false"
+          ></DatePicker>
+        </FormItem>
+        <div class="center">
+          <Button
+            size="large"
+            type="primary"
+            :loading="subLoading"
+            @click="next('formItem')"
+            >保存，下一步</Button
+          >
+        </div>
+      </Card>
+    </Form>
+  </div>
+</template>
+
+<script>
+import { validateSpecial } from "@/libs/validate";
+import TinymceEditor from "../../../my-components/xboot/tinymce";
+import {
+  savePreChange,
+  viewPreFirst,
+  getCanTenderList,
+  savePreChangeEdit,
+} from "@/api/publishApi";
+export default {
+  name: "correctStep1",
+  props: {
+    currentStep: {
+      type: Number,
+      default: 0,
+    },
+  },
+  components: {
+    TinymceEditor,
+  },
+  data() {
+    return {
+      subLoading: false,
+      aboutProject: "",
+      formItem: {
+        noticeNumber: "",
+        title: "",
+        content: "",
+        isDelay: 1,
+        openBidTime: "",
+      },
+      ruleValidate: {
+        title: [
+          { required: true, message: "公告名称不能为空！", trigger: "blur" },
+          { validator: validateSpecial, trigger: "blur" },
+          {
+            max: 300,
+            message: "公告名称度不能超过300个字符！",
+            trigger: "blur",
+          },
+        ],
+        content: [
+          { required: true, message: "公告内容不能为空！", trigger: "blur" },
+          { validator: validateSpecial, trigger: "blur" },
+          {
+            max: 5000,
+            message: "公告内容度不能超过5000个字符！",
+            trigger: "blur",
+          },
+        ],
+        isDelay: [
+          {
+            required: true,
+            message: "请选择是否延期开标！",
+            trigger: "change",
+            type: "number",
+          },
+        ],
+        openBidTime: [
+          {
+            required: true,
+            message: "请选择开标时间！",
+            trigger: "change",
+            type: "date",
+          },
+        ],
+      },
+      preInfo: {},
+    };
+  },
+  created() {
+    this.getProjects(this.$route.query.id);
+  },
+  activated() {
+    this.getProjects(this.$route.query.id);
+    if (this.getStore("editCorrectPre")) {
+      this.removeStore("editCorrectPre");
+    }
+  },
+  methods: {
+    // 获取项目
+    getProjects(id) {
+      getCanTenderList().then((res) => {
+        if (res.success) {
+          let projectList = res.result;
+          viewPreFirst(id).then((data) => {
+            if (data.success) {
+              this.preInfo = data.result;
+              this.aboutProject = projectList.find(
+                (item) => this.preInfo.pid == item.id
+              ).title;
+              this.formItem.noticeNumber = this.preInfo.noticeNumber;
+              this.formItem.content = this.preInfo.content;
+              this.formItem.isDelay = this.preInfo.isDelay;
+              this.formItem.openBidTime = new Date(this.preInfo.openBidTime);
+              this.formItem.title = this.preInfo.title;
+            }
+          });
+        }
+      });
+    },
+    next(name) {
+      let data = {
+        ...this.formItem,
+        id: this.$route.query.id,
+      };
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if(data.isDelay) {
+            data.openBidTime = this.format(new Date(this.formItem.openBidTime), 'yyyy-MM-dd HH:mm:ss');
+          }else {
+            data.openBidTime = ''
+          }
+          this.subLoading = true;
+          savePreChangeEdit(data).then((res) => {
+            this.subLoading = false;
+            if (res.success) {
+              this.$emit("update:currentStep", 1);
+            }
+          });
+        }
+      });
+    },
+  },
+};
+</script>
+
+<style lang="less">
+.correctStep1 {
+  .center {
+    text-align: center;
+    margin-top: 30px;
+  }
+}
+</style>
