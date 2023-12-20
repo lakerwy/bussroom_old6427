@@ -1,6 +1,16 @@
 import Main from '@/views/Main.vue';
 
 // 不作为Main组件的子页面展示的页面单独写，如下
+export const navpageRouter = {
+    path: '/navPage',
+    name: 'navPage',
+    meta: {
+        title: '登录 - 我的商务室 '
+    },
+    component: () => import('@/views/navPage.vue')
+    // component: () => import('@/views/home/homepage.vue')
+};
+
 export const loginRouter = {
     path: '/login',
     name: 'login',
@@ -54,7 +64,7 @@ export const reset = {
 //         title: 'cms - 二手临时信息'
 //     },
 //     component: () => import('@/views/SecondInfo.vue')
-// }; 
+// };
 
 export const relateRouter = {
     path: '/relate',
@@ -139,7 +149,7 @@ export const otherRouter = {
         { path: '/tender/abandonTender', title: '新建废标公告', name: 'abandonTender', component: () => import('@/views/infoPublish/tender/abandonTender.vue') },
         { path: '/tender/editCorrectTender', title: '编辑变更招标公告', name: 'editCorrectTender', component: () => import('@/views/infoPublish/tender/editCorrectTender.vue') },
         { path: '/tender/editAbandonTender', title: '编辑废标招标公告', name: 'editAbandonTender', component: () => import('@/views/infoPublish/tender/editAbandonTender.vue') },
-        
+
         { path: '/candidate/candidateDetail', title: '中标候选人公示详情', name: 'candidateDetail', component: () => import('@/views/infoPublish/candidate/candidateDetail.vue') },
         { path: '/candidate/addCandidate', title: '新建中标候选人公示', name: 'addCandidate', component: () => import('@/views/infoPublish/candidate/addCandidate.vue') },
         { path: '/candidate/editCandidate', title: '编辑中标候选人公示', name: 'editCandidate', component: () => import('@/views/infoPublish/candidate/editCandidate.vue') },
@@ -178,6 +188,7 @@ export const appRouter = [];
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
     // secondInfo,
+    navpageRouter,
     loginRouter,
     indexRouter,
     registRouter,

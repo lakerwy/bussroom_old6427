@@ -400,24 +400,26 @@ export default {
             expires: endDate,
           });
 
-          this.setStore("userInfo", res.result);
+          this.setStore("userInfo", JSON.stringify(res.result));
           this.$store.commit("setAvatarPath", res.result.avatar);
           this.$store.commit("setAdded", false);
           // 加载菜单
-          util.initRouter(this, queryStr,queryType);
-          if (this.$route.query.from) {
-            this.$router.push({
-              name: "home_index",
-              query: {
-                from:this.$route.query.from
-              }
-          });
-          } else {
-            this.$router.push({
-            name: "home_index",
-
-          });
-          }
+          util.initRouter(this, queryStr,queryType).then(()=>{
+            var name = this.getQuery().name || 'home_index';
+            console.log(name);
+            if (this.$route.query.from) {
+              this.$router.push({
+                name: name,
+                query: {
+                  from:this.$route.query.from
+                }
+              });
+            } else {
+              this.$router.push({
+                name: name,
+              });
+            }
+          })
         } else {
           this.loading = false;
         }
@@ -545,7 +547,7 @@ export default {
                 Cookies.set("userInfo", JSON.stringify(res.result), {
                   expires: 7,
                 });
-                this.setStore("userInfo", res.result);
+                this.setStore("userInfo", JSON.stringify(res.result));
                 this.$store.commit("setAvatarPath", res.result.avatar);
                 // 加载菜单11
                 util.initRouter(this);
@@ -611,12 +613,8 @@ export default {
     },
     indexLogin() {
       var hrefStr = location.href.split("?")[1];
-      var sessionId;
-      if (hrefStr.indexOf("&") != -1) {
-        sessionId = hrefStr.split("&")[0].split("=")[1];
-      } else {
-        sessionId = hrefStr.split("=")[1];
-      }
+      var objQuery = this.getQuery()
+      var sessionId = objQuery.sessionId || '';
       if (sessionId) {
         getToken({
           sessionId,
@@ -654,6 +652,18 @@ export default {
         });
       }
     },
+    getQuery() {
+      let queryList = location.href.split("?")[1]
+      let query = {};
+      if (queryList) {
+        queryList = queryList.replace(/&/g,'&@').split('&@')
+        queryList.forEach(function (item) {
+          var arr = item.replace(/=/g,'=@').split('=@')
+          query[arr[0]] = arr[1];
+        })
+      }
+      return query;
+    }
   },
   mounted() {
     this.indexLogin();

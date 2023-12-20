@@ -392,7 +392,7 @@ export default {
           } else {
             Cookies.set("userInfo", JSON.stringify(res.result));
           }
-          this.setStore("userInfo", res.result);
+          this.setStore("userInfo", JSON.stringify(res.result));
           this.$store.commit("setAvatarPath", res.result.avatar);
           // 加载菜单
           util.initRouter(this);
@@ -529,7 +529,7 @@ export default {
                 Cookies.set("userInfo", JSON.stringify(res.result), {
                   expires: this.endDate,
                 });
-                this.setStore("userInfo", res.result);
+                this.setStore("userInfo", JSON.stringify(res.result));
                 this.$store.commit("setAvatarPath", res.result.avatar);
                 // 加载菜单
                 util.initRouter(this);

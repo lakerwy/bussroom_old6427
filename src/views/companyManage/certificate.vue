@@ -539,7 +539,7 @@
     },
     methods: {
       init() {
-        let v = JSON.parse(Cookies.get("userInfo"));
+        let v = JSON.parse(window.localStorage.getItem('userInfo'));
         // console.log(userInfo);
         if (v.companyId) {
           let id = v.companyId;
@@ -573,7 +573,7 @@
             Cookies.set("userInfo", JSON.stringify(res.result), {
               expires: endDate
             });
-            this.setStore("userInfo", res.result);
+            this.setStore("userInfo", JSON.stringify(res.result));
           }
         });
       },
@@ -589,7 +589,7 @@
                   this.$Message.success("更新信息成功");
                   if (!this.companyData.id) {
                     this.companyData.id = res.result.id;
-                    let v = Cookies.get("userInfo")
+                    let v = window.localStorage.getItem('userInfo')
                     v = JSON.parse(v)
                     v.companyId = res.result.id;
                     console.log(v);
@@ -649,7 +649,7 @@
             var that = this;
             create(parseInt(Math.random() * 10000)).then(res => {
               if (res.success) {
-                let v = JSON.parse(Cookies.get("userInfo"));
+                let v = JSON.parse(window.localStorage.getItem('userInfo'));
                 var inviterId = v.id
                 getInviteCode().then(response => { //这里的第一次处理后台返回来的二进制留数据 转化为base64
                   //这里的data数据是后台返回来的，这里的key是params中的键值（byte）

@@ -70,7 +70,7 @@ export default {
           Cookies.set("userInfo", JSON.stringify(res.result), {
             expires: endDate
           });
-          this.setStore("userInfo", res.result);
+          this.setStore("userInfo", JSON.stringify(res.result));
         }
       });
     },

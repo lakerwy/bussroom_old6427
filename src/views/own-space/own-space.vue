@@ -560,7 +560,7 @@
             Cookies.set("userInfo", JSON.stringify(res.result), {
               expires: endDate
             });
-            this.setStore("userInfo", res.result);
+            this.setStore("userInfo", JSON.stringify(res.result));
             let userInfo = res.result;
             userInfo.addressArray = [];
             for (let attr in userInfo) {
@@ -592,7 +592,7 @@
         });
         // let userInfo = JSON.parse(str);
 
-        let v = JSON.parse(Cookies.get("userInfo"));
+        let v = JSON.parse(window.localStorage.getItem('userInfo'));
         // 转换null为""
         for (let attr in v) {
           if (v[attr] == null) {
@@ -942,7 +942,7 @@
             Cookies.set("userInfo", JSON.stringify(res.result), {
               expires: endDate
             });
-            this.setStore("userInfo", res.result);
+            this.setStore("userInfo", JSON.stringify(res.result));
           }
         });
       },

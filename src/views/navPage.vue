@@ -3,12 +3,12 @@
 </style>
 
 <template>
-  <div class="main" :class="{ 'main-hide-text': shrink }">
+  <div class="main">
     <Modal
-      v-model="busyFlag"
-      :mask-closable="false"
-      width="360"
-      :closable="false"
+        v-model="busyFlag"
+        :mask-closable="false"
+        width="360"
+        :closable="false"
     >
       <p slot="header" style="color: #f60; text-align: center">
         <Icon type="ios-information-circle"></Icon>
@@ -19,201 +19,92 @@
       </div>
       <div slot="footer">
         <Button type="error" size="large" long :loading="true"
-          >{{ busyTimeout }}秒后重试</Button
+        >{{ busyTimeout }}秒后重试</Button
         >
       </div>
     </Modal>
     <div
-      class="sidebar-menu-con menu-bar"
-      :style="{
-        width: shrink ? '60px' : '230px',
-        overflow: shrink ? 'visible' : 'auto',
-      }"
+        class="main-header-con"
     >
-      <shrinkable-menu
-        :shrink="shrink"
-        @on-change="handleSubmenuChange"
-        :theme="menuTheme"
-        :before-push="beforePush"
-        :open-names="openedSubmenuArr"
-        :menu-list="menuList"
-      >
-        <div slot="top" class="logo-con">
-          <!-- <img v-show="!shrink" src="../assets/logo.png" key="max-logo" />
-          <img v-show="shrink" src="../assets/logo-min.png" key="min-logo" />-->
-          <div v-show="!shrink" class="bigLogo">我的商务室</div>
-          <div v-show="shrink" class="minLogo">商</div>
-        </div>
-      </shrinkable-menu>
-    </div>
-    <div
-      class="main-header-con"
-      :style="{ paddingLeft: shrink ? '60px' : '230px' }"
-    >
-      <div class="main-header">
-        <div class="navicon-con">
-          <Button
-            :style="{
-              transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)',
-              height: '48px',
-            }"
-            type="text"
-            @click="toggleClick"
-          >
-            <Icon type="md-menu" size="32"></Icon>
-          </Button>
-        </div>
-        <div class="header-middle-con">
-          <div class="main-breadcrumb" v-if="navType == 4">
-            <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
-          </div>
-          <div class="main-nav-menu" v-if="navType == 1 || navType == 2">
-            <Menu
-              mode="horizontal"
-              :active-name="currNav"
-              @on-select="selectNav"
-            >
-              <MenuItem
-                v-for="(item, i) in navList.slice(0, sliceNum)"
-                :key="i"
-                :name="item.name"
-              >
-                <Icon :type="item.icon" v-if="navType == 1" />
-                {{ item.title }}
-              </MenuItem>
-              <Submenu name="sub" v-if="navList.length > sliceNum">
-                <template slot="title">更多</template>
-                <MenuItem
-                  v-for="(item, i) in navList.slice(sliceNum, navList.length)"
-                  :key="i"
-                  :name="item.name"
-                >
-                  <Icon :type="item.icon" v-if="navType == 1" />
-                  {{ item.title }}
-                </MenuItem>
-              </Submenu>
-            </Menu>
-          </div>
-          <div class="main-nav" v-if="navType == 3">
-            <Dropdown transfer @on-click="selectNav">
-              <div style="cursor: pointer">
-                {{ currNavTitle }}
-                <Icon type="ios-arrow-down"></Icon>
-              </div>
-              <DropdownMenu slot="list">
-                <DropdownItem
-                  v-for="(item, i) in navList"
-                  :key="i"
-                  :name="item.name"
-                  :selected="currNav == item.name"
-                >
-                  <div class="nav-item">
-                    <Icon
-                      :type="item.icon"
-                      :size="16"
-                      style="margin: 0 10px 3px 0"
-                    ></Icon>
-                    {{ item.title }}
-                  </div>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        </div>
-        <div
-          :class="{
-            'header-avator-con': navType != 4,
-            'header-avator-con nav4': navType == 4,
-          }"
-          style="padding-left: 50px"
-        >
+      <div class="main-header-nav main-header">
+        <div class="mySws">我的商务室</div>
+        <navMenu class="navMenu" :menu-list="menuList"></navMenu>
+        <div :class="{'header-avator-con': navType != 4,'header-avator-con nav4': navType == 4,}">
           <Dropdown @on-click="selectNav" class="options" v-if="navType == 4">
             <Icon type="ios-apps" :size="24" class="language"></Icon>
             <DropdownMenu slot="list">
               <DropdownItem
-                v-for="(item, i) in navList"
-                :key="i"
-                :name="item.name"
-                :selected="currNav == item.name"
+                  v-for="(item, i) in navList"
+                  :key="i"
+                  :name="item.name"
+                  :selected="currNav == item.name"
               >
                 <div>
                   <Icon
-                    :type="item.icon"
-                    :size="14"
-                    style="margin: 0 10px 2px 0"
+                      :type="item.icon"
+                      :size="14"
+                      style="margin: 0 10px 2px 0"
                   ></Icon>
                   {{ item.title }}
                 </div>
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <full-screen
-            class="tool_icon"
-            v-model="isFullScreen"
-            @on-change="fullscreenChange"
-          ></full-screen>
-          <!-- <Dropdown @on-click="handleLanDropdown" class="options">
-            <Icon type="md-globe" :size="24" class="language"></Icon>
-            <DropdownMenu slot="list">
-              <DropdownItem name="zh-CN">中文</DropdownItem>
-              <DropdownItem name="en-US">English</DropdownItem>
-            </DropdownMenu>
-          </Dropdown> -->
-          <!-- <lock-screen class="tool_icon"></lock-screen> -->
+<!--          <full-screen-->
+<!--              class="tool_icon"-->
+<!--              v-model="isFullScreen"-->
+<!--              @on-change="fullscreenChange"-->
+<!--          ></full-screen>-->
           <message-tip class="tool_icon" v-model="mesCount"></message-tip>
           <div class="user-dropdown-menu-con">
             <Row
-              type="flex"
-              justify="end"
-              align="middle"
-              class="user-dropdown-innercon"
+                type="flex"
+                justify="end"
+                align="middle"
+                class="user-dropdown-innercon"
             >
               <Dropdown
-                transfer
-                trigger="hover"
-                @on-click="handleClickUserDropdown"
+                  transfer
+                  trigger="hover"
+                  @on-click="handleClickUserDropdown"
               >
-                <a>
+                <a style="color: #fff">
                   <Avatar
-                    :src="avatarPath"
-                    style="background: #619fe7; margin-left: 10px"
+                      :src="avatarPath"
+                      style="background: #619fe7; margin-left: 10px"
                   ></Avatar>
                   <span class="main-user-name">{{
-                    $store.state.user.nickname
-                  }}</span>
+                      $store.state.user.nickname
+                    }}</span>
                   <Icon type="md-arrow-dropdown" />
                 </a>
                 <DropdownMenu slot="list">
                   <DropdownItem name="ownSpace">{{
-                    $t("userCenter")
-                  }}</DropdownItem>
+                      $t("userCenter")
+                    }}</DropdownItem>
                   <DropdownItem name="changePass">{{
-                    $t("changePass")
-                  }}</DropdownItem>
+                      $t("changePass")
+                    }}</DropdownItem>
                   <DropdownItem name="loginout" divided>{{
-                    $t("logout")
-                  }}</DropdownItem>
+                      $t("logout")
+                    }}</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Row>
           </div>
         </div>
       </div>
-
       <div class="tags-con">
         <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
       </div>
     </div>
-    <div class="single-page-con" :style="{ left: shrink ? '60px' : '230px' }">
+    <div class="single-page-con">
       <div class="single-page">
-        <keep-alive :include="cachePage">
-          <router-view></router-view>
-        </keep-alive>
+        <homepage></homepage>
       </div>
     </div>
     <!-- 全局加载动画 -->
     <circleLoading class="loading-position" v-show="loading" />
-
     <div class="containter">
       <div class="containter_box">
         <p class="closebtn"><img src="https://cdn.chinabidding.cn/public/2020/img/syhd_tc_icongb2.png" alt="" /></p>
@@ -223,7 +114,8 @@
 </template>
 
 <script>
-import shrinkableMenu from "./main-components/shrinkable-menu/shrinkable-menu.vue";
+import homepage from "./home/homepage";
+import navMenu from "./main-components/navMenu/nav-menu.vue";
 import tagsPageOpened from "./main-components/tags-page-opened.vue";
 import breadcrumbNav from "./main-components/breadcrumb-nav.vue";
 import fullScreen from "./main-components/fullscreen.vue";
@@ -240,13 +132,14 @@ import {
 } from "@/api/index";
 import SockJS from "sockjs-client";
 import stompOld from "@/libs/stomp.js";
-
 import axios from "axios";
+
 var Stomp = stompOld.Stomp;
 var client;
 export default {
   components: {
-    shrinkableMenu,
+    homepage,
+    navMenu,
     tagsPageOpened,
     breadcrumbNav,
     fullScreen,
@@ -319,12 +212,6 @@ export default {
   methods: {
     init() {
       this.$store.commit("getNickName");
-      // 菜单
-      let pathArr = util.setCurrentPath(this, this.$route.name);
-      // this.$store.commit("updateMenulist");
-      if (pathArr.length >= 2) {
-        this.$store.commit("addOpenSubmenu", pathArr[1].name);
-      }
       let userInfo = JSON.parse(window.localStorage.getItem('userInfo'));
       this.username = this.$store.state.user.nickname;
 
@@ -358,12 +245,12 @@ export default {
     onConnected(frame) {
       console.log("连接ws成功: " + frame);
       var topicSubscription = client.subscribe(
-        "/topic/subscribe",
-        this.responseCallback
+          "/topic/subscribe",
+          this.responseCallback
       );
       var queueSubscription = client.subscribe(
-        "/user/" + this.userId + "/queue/subscribe",
-        this.responseCallback
+          "/user/" + this.userId + "/queue/subscribe",
+          this.responseCallback
       );
     },
     onFailed(frame) {
@@ -434,10 +321,10 @@ export default {
       if (!openpageHasTag) {
         //  解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
         util.openNewPage(
-          this,
-          name,
-          this.$route.params || {},
-          this.$route.query || {}
+            this,
+            name,
+            this.$route.params || {},
+            this.$route.query || {}
         );
       }
     },
@@ -450,19 +337,6 @@ export default {
     },
     fullscreenChange(isFullScreen) {
       // console.log(isFullScreen);
-    },
-    resize() {
-      let currWidth = document.body.clientWidth;
-      if (currWidth <= 1200 && currWidth > 900) {
-        this.sliceNum = 2;
-        this.shrink = true;
-      } else if (currWidth <= 900) {
-        this.sliceNum = 1;
-        this.shrink = true;
-      } else {
-        this.sliceNum = 3;
-        this.shrink = false;
-      }
     },
   },
   watch: {
@@ -481,11 +355,6 @@ export default {
   },
   mounted() {
     this.init();
-    let that = this;
-    this.resize();
-    window.addEventListener("resize", function () {
-      that.resize();
-    });
   },
   created() {
     // 显示打开的页面的列表
@@ -493,6 +362,47 @@ export default {
   },
 };
 </script>
+<style lang="less" scoped>
+.main-header-con {
+  padding-left: 0;
+}
+.main-header-nav {
+  min-width: 740px;
+  height: 60px;
+  background: #fff;
+  //-webkit-box-shadow: 0 2px 1px 1px rgba(100, 100, 100, 0.1);
+  //box-shadow: 0 2px 1px 1px rgba(100, 100, 100, 0.1);
+  position: relative;
+  z-index: 11;
+  display: flex;
+  background: #2B64CE;
+  .mySws {
+    //vertical-align: top;
+    //display: inline-block;
+    width: 180px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 16px;
+    color: #fff;
+  }
+  .navMenu {
+    background: #2B64CE;
+    //display: inline-block;
+  }
+  .header-avator-con {
+    width: 170px;
+  }
+  .message-con {
+    /deep/ .ivu-icon-md-notifications {
+      color: #fff;
+    }
+  }
+  //.main-user-name {
+  //  color: #fff;
+  //}
+}
+</style>
 
 <style>
 /* 2022四月营销活动弹出 */

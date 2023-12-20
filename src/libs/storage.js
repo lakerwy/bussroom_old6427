@@ -14,11 +14,11 @@ export const setStore = (name, content) => {
  */
 export const getStore = name => {
     if (!name) return;
-    let v = window.localStorage.getItem(name);
-    if (v == null) {
+    let temp = window.localStorage.getItem(name);
+    if (temp == null) {
         return "";
     }
-    return v;
+    return temp;
 }
 
 /**

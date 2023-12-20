@@ -19,7 +19,7 @@ const user = {
             location.reload();
         },
         getNickName(state) {
-            let v = JSON.parse(Cookies.get("userInfo"));
+            let v = JSON.parse(window.localStorage.getItem('userInfo'));
             // 转换null为""
             for (let attr in v) {
                 if (v[attr] == null) {

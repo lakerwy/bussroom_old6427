@@ -621,10 +621,15 @@ export default {
       }
     },
     enterTo(a, data) {
-      this.$router.push({
+      // this.$router.push({
+      //   name: a,
+      //   params: data,
+      // }, );
+      let routeData = this.$router.resolve({
         name: a,
-        params: data,
+        params: data
       });
+      window.open(routeData.href, '_blank');
     },
     updateUserInfo() {
       // 更新用户信息

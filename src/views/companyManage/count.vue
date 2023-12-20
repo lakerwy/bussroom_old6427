@@ -970,7 +970,7 @@
             var that = this;
             create(parseInt(Math.random() * 10000)).then(res => {
               if (res.success) {
-                let v = JSON.parse(Cookies.get("userInfo"));
+                let v = JSON.parse(window.localStorage.getItem('userInfo'));
                 var inviterId = v.id
                 getInviteCode().then(response => { //这里的第一次处理后台返回来的二进制留数据 转化为base64
                   //这里的data数据是后台返回来的，这里的key是params中的键值（byte）
@@ -1654,7 +1654,7 @@
     },
     activated() {
       this.beforeEnter()
-      let v = JSON.parse(Cookies.get("userInfo"));
+      let v = JSON.parse(window.localStorage.getItem('userInfo'));
       // 转换null为""
       for (let attr in v) {
         if (v[attr] == null) {

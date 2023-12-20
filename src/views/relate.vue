@@ -149,7 +149,7 @@ export default {
                       Cookies.set("userInfo", JSON.stringify(res.result), {
                         expires: 7
                       });
-                      this.setStore("userInfo", res.result);
+                      this.setStore("userInfo", JSON.stringify(res.result));
                       this.$store.commit("setAvatarPath", res.result.avatar);
                       // 加载菜单
                       util.initRouter(this);
@@ -197,7 +197,7 @@ export default {
         offline_server: "你的离线验证接口地址 可选但此处不能为空"
       }).then(function(vaptchaObj) {
         vaptchaObject = vaptchaObj;
-        let userInfo = Cookies.get("userInfo");
+        let userInfo = window.localStorage.getItem('userInfo');
         if (userInfo) {
           vaptchaObject.validate(); // 开始验证
         }
@@ -228,7 +228,7 @@ export default {
     this.form.id = q.id;
     // 加载验证码
     this.initVaptcha();
-    let userInfo = Cookies.get("userInfo");
+    let userInfo = window.localStorage.getItem('userInfo');
     if (!userInfo) {
       this.relateLoading = false;
     }

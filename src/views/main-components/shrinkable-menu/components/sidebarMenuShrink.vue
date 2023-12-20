@@ -116,8 +116,8 @@
       },
     },
     mounted() {
-      this.userType = JSON.parse(this.getStore('userInfo')).type;
-      this.loginPrompt = JSON.parse(this.getStore('userInfo')).loginPrompt;
+      this.userType = JSON.parse(window.localStorage.getItem('userInfo')).type;
+      this.loginPrompt = JSON.parse(window.localStorage.getItem('userInfo')).loginPrompt;
 
       // 是否显示自主续费 3月1日到5月31日的到期的客户自主续费不显示
       let endDate = JSON.parse(this.getStore("userInfo")).expireTime;

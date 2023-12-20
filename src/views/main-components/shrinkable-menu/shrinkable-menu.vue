@@ -65,7 +65,7 @@ export default {
   methods: {
     handleChange(name) {
       console.log(name)
-      let memberType = JSON.parse(this.getStore('userInfo')).memberType
+      let memberType = JSON.parse(window.localStorage.getItem('userInfo')).memberType
       if (name === "creditRate" && memberType === '免费会员') {
         var url = "https://tb.53kf.com/code/client/160d33b8d6369cbb3d8ac9b54e49b8bc7/3";
         // var url = "https://tb.53kf.com/code/client/0ae6bb374440bbf180f02e04d57fb6962/10";
