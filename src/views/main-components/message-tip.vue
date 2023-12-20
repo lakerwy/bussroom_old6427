@@ -16,14 +16,27 @@ export default {
     value: {
       type: Number,
       default: 0
+    },
+    isOpenNewPage: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     showMessage() {
       util.openNewPage(this, "message_index");
-      this.$router.push({
-        name: "message_index"
-      });
+      if(this.isOpenNewPage){
+        let name = 'message_index';
+        let sessionId = window.localStorage.getItem('sessionId');
+        const resolve = this.$router.resolve({
+          name: 'index',
+        })
+        window.open(resolve.href + '?sessionId='+sessionId+'&name='+name, '_blank')
+      } else {
+        this.$router.push({
+          name: "message_index"
+        });
+      }
     }
   }
 };

@@ -30,32 +30,12 @@
         <div class="mySws">我的商务室</div>
         <navMenu class="navMenu" :menu-list="menuList"></navMenu>
         <div :class="{'header-avator-con': navType != 4,'header-avator-con nav4': navType == 4,}">
-          <Dropdown @on-click="selectNav" class="options" v-if="navType == 4">
-            <Icon type="ios-apps" :size="24" class="language"></Icon>
-            <DropdownMenu slot="list">
-              <DropdownItem
-                  v-for="(item, i) in navList"
-                  :key="i"
-                  :name="item.name"
-                  :selected="currNav == item.name"
-              >
-                <div>
-                  <Icon
-                      :type="item.icon"
-                      :size="14"
-                      style="margin: 0 10px 2px 0"
-                  ></Icon>
-                  {{ item.title }}
-                </div>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
 <!--          <full-screen-->
 <!--              class="tool_icon"-->
 <!--              v-model="isFullScreen"-->
 <!--              @on-change="fullscreenChange"-->
 <!--          ></full-screen>-->
-          <message-tip class="tool_icon" v-model="mesCount"></message-tip>
+          <message-tip class="tool_icon" v-model="mesCount" :isOpenNewPage="true"></message-tip>
           <div class="user-dropdown-menu-con">
             <Row
                 type="flex"
@@ -282,19 +262,14 @@ export default {
     handleClickUserDropdown(name) {
       if (name == "ownSpace") {
         util.openNewPage(this, "ownspace_index");
-        this.$router.push({
-          name: "ownspace_index",
-        });
+        this.openNewWindow('ownspace_index')
       } else if (name == "changePass") {
         util.openNewPage(this, "change_pass");
-        this.$router.push({
-          name: "change_pass",
-        });
+        this.openNewWindow('change_pass')
       } else if (name == "loginout") {
         // 退出登录
         let sessionId = localStorage.getItem("sessionId");
         this.$store.commit("setLoading", true);
-
         getOtherSet().then((res) => {
           this.$store.commit("setLoading", false);
           if (res.result) {
@@ -338,6 +313,14 @@ export default {
     fullscreenChange(isFullScreen) {
       // console.log(isFullScreen);
     },
+    //新打开一个窗口页面
+    openNewWindow(name){
+      let sessionId = window.localStorage.getItem('sessionId')
+      const resolve = this.$router.resolve({
+        name: 'index',
+      })
+      window.open(resolve.href + '?sessionId='+sessionId+'&name='+name, '_blank')
+    }
   },
   watch: {
     $route(to) {

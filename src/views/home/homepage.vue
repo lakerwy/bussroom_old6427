@@ -625,11 +625,7 @@ export default {
       //   name: a,
       //   params: data,
       // }, );
-      let routeData = this.$router.resolve({
-        name: a,
-        params: data
-      });
-      window.open(routeData.href, '_blank');
+      this.openNewWindow(a)
     },
     updateUserInfo() {
       // 更新用户信息
@@ -807,9 +803,7 @@ export default {
                 content: "您可通过账号管理，邀请更多同事加入企业账号，共享会员服务。",
                 okText: "立即邀请",
                 onOk: () => {
-                  this.$router.push({
-                    path: "/companyManage/count",
-                  });
+                  this.openNewWindow('count')
                 },
               });
               // 未邀请用户
@@ -837,9 +831,10 @@ export default {
       });
 
       if (this.$route.query.from) {
-        this.$router.push({
-          path: '/supplier/platform'
-        })
+        this.openNewWindow('platform')
+        // this.$router.push({
+        //   path: '/supplier/platform'
+        // })
       }
     },
     getCooldate(){
@@ -968,19 +963,19 @@ export default {
       // 获取频道页面
       getAllProduct().then((res) => {});
     },
-
+    //新打开一个窗口页面
+    openNewWindow(name){
+      let sessionId = window.localStorage.getItem('sessionId')
+      const resolve = this.$router.resolve({
+        name: 'index',
+      })
+      window.open(resolve.href + '?sessionId='+sessionId+'&name='+name, '_blank')
+    }
   },
   mounted() {
     this.init();
     this.getItemInfo();
     this.getUserInfo();
-
-    /* this.$router.push({
-            name: "subscribe",
-          }); */
-    window.addEventListener("resize", function () {
-      console.log(111)
-    });
   },
   destroyed() {
     clearInterval(this.timeId);
