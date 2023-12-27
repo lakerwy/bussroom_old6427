@@ -80,7 +80,9 @@
     </div>
     <div class="single-page-con">
       <div class="single-page">
-        <homepage></homepage>
+        <keep-alive :include="cachePage">
+          <router-view></router-view>
+        </keep-alive>
       </div>
     </div>
     <!-- 全局加载动画 -->

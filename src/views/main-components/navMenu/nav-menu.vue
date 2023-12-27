@@ -7,7 +7,7 @@
 
 <template>
   <Menu mode="horizontal" theme="primary" active-name="1" @on-select="changeMenu">
-    <template v-for="item in menuList">
+    <template v-for="item in menuList2">
       <!-- 如果是一级菜单并设置了不一直显示 -->
       <template v-if="item.level == '1' && !item.showAlways">
         <MenuItem v-if="item.children.length <= 1" :class="{
@@ -96,6 +96,7 @@ export default {
       userType: "",
       loginPrompt: "",
       showRenewal: false,
+      menuList2: []
     }
   },
   methods: {
@@ -128,11 +129,9 @@ export default {
         }
       }
       if (willpush) {
-        let sessionId = window.localStorage.getItem('sessionId')
-        const resolve = this.$router.resolve({
-          name: 'index',
-        })
-        window.open(resolve.href + '?sessionId='+sessionId+'&name='+name, '_blank')
+        this.$router.push({
+          name: name,
+        });
       }
     },
     itemTitle(item) {
@@ -145,8 +144,51 @@ export default {
     showIconFlag(str) {
       return this.pageList.indexOf(str) < 0 ? true : false;
     },
+    setNavList(){
+      const navList = [];
+      let moreNav = {
+        "name": "more",
+        "showAlways": true,
+        "level": 1,
+        "type": 0,
+        "title": "更多",
+        "path": "/home",
+        "icon": "ios-apps",
+        children: [],
+      }
+      for (let i=0; i<this.menuList.length; i++) {
+        if(this.menuList[i].children.length>1 || this.menuList[i].title == '首页' || this.menuList[i].title == '我的收藏'){
+          navList.push(this.menuList[i])
+        } else {
+          moreNav.children.push(this.menuList[i].children[0])
+        }
+      }
+      navList.push(moreNav);
+      return navList
+    },
+    resize() {
+      this.menuList2 = [];
+      let currWidth = document.body.clientWidth;
+      // if (currWidth <= 1280 ) {
+      if (currWidth <= 1280 ) {
+        this.menuList2 = this.setNavList();
+      }  else {
+        this.menuList2 = Object.assign({},this.menuList);
+      }
+      console.log(this.menuList2)
+    },
+  },
+  watch: {
+    menuList(val) {
+      this.resize();
+    }
   },
   mounted() {
+    let that = this;
+    this.resize();
+    window.addEventListener("resize", function () {
+      that.resize();
+    });
     this.userType = JSON.parse(this.getStore("userInfo")).type;
     this.loginPrompt = JSON.parse(this.getStore("userInfo")).loginPrompt;
 

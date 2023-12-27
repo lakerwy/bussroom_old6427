@@ -1054,7 +1054,7 @@ export default {
     }
   }
   .yhqBg {
-    max-width: 504.3px;
+    //max-width: 504.3px;
     margin-bottom: 15px;
     height: 89px;
     display: flex;

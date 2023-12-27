@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
         next(false);
     } else {
         // 白名单
-        var whiteList = name != 'login' && name != 'regist' && name != 'regist-result' && name != 'index' && name != 'relate' && name != 'reset' && name != 'authorize' && name != 'second-info';
+        var whiteList =name != 'navpage' && name != 'login' && name != 'regist' && name != 'regist-result' && name != 'index' && name != 'relate' && name != 'reset' && name != 'authorize' && name != 'second-info';
         if (name == 'login') {
             if (to.query.query == 'email') {
                 if (to.query.type == 1) {

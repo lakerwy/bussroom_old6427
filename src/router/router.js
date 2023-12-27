@@ -1,15 +1,15 @@
 import Main from '@/views/Main.vue';
 
 // 不作为Main组件的子页面展示的页面单独写，如下
-export const navpageRouter = {
-    path: '/navPage',
-    name: 'navPage',
-    meta: {
-        title: '登录 - 我的商务室 '
-    },
-    component: () => import('@/views/navPage.vue')
-    // component: () => import('@/views/home/homepage.vue')
-};
+// export const navpageRouter = {
+//     path: '/navpage',
+//     name: 'navpage',
+//     meta: {
+//         title: '登录 - 我的商务室 '
+//     },
+//     component: () => import('@/views/navPage.vue')
+//     // component: () => import('@/views/home/homepage.vue')
+// };
 
 export const loginRouter = {
     path: '/login',
@@ -188,7 +188,7 @@ export const appRouter = [];
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
     // secondInfo,
-    navpageRouter,
+    // navpageRouter,
     loginRouter,
     indexRouter,
     registRouter,
