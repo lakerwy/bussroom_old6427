@@ -377,8 +377,9 @@ export default {
     height: 60px;
     text-align: center;
     line-height: 60px;
-    font-size: 16px;
+    font-size: 20px;
     color: #fff;
+    font-weight: bold;
   }
   .topNav {
     width: calc(100% - 350px);

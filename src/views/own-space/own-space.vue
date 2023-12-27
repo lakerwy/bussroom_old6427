@@ -20,7 +20,7 @@
             <MenuItem name="基本信息">基本信息</MenuItem>
             <MenuItem name="安全设置">安全设置</MenuItem>
             <MenuItem name="第三方账号绑定">第三方账号绑定</MenuItem>
-            <MenuItem name="企业采钻" v-if="managerFlag" to="http://www.youyijifen.com/" target="_blank">企业采钻</MenuItem>
+            <MenuItem name="企业采钻" v-if="managerFlag" to="https://jfsc.chinabidding.cn/front/index.html#/home" target="_blank">企业采钻</MenuItem>
             <!-- <MenuItem name="我的订单" :to="{name:'special',params:{flag:3}}">我的订单</MenuItem> -->
           </Menu>
         </div>
