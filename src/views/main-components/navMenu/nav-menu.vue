@@ -157,7 +157,7 @@ export default {
         children: [],
       }
       for (let i=0; i<this.menuList.length; i++) {
-        if(this.menuList[i].children.length>1 || this.menuList[i].title == '首页' || this.menuList[i].title == '我的收藏'){
+        if(this.menuList[i].children.length>1 || this.menuList[i].title == '首页' || this.menuList[i].title == '我的收藏' || this.menuList[i].title == '自主续费'){
           navList.push(this.menuList[i])
         } else {
           moreNav.children.push(this.menuList[i].children[0])
@@ -170,7 +170,7 @@ export default {
       this.menuList2 = [];
       let currWidth = document.body.clientWidth;
       // if (currWidth <= 1280 ) {
-      if (currWidth <= 1280 ) {
+      if (currWidth <= 1400 ) {
         this.menuList2 = this.setNavList();
       }  else {
         this.menuList2 = Object.assign({},this.menuList);
