@@ -404,22 +404,19 @@ export default {
           this.$store.commit("setAvatarPath", res.result.avatar);
           this.$store.commit("setAdded", false);
           // 加载菜单
-          util.initRouter(this, queryStr,queryType).then(()=>{
-            var name = this.getQuery().name || 'home_index';
-            console.log(name);
-            if (this.$route.query.from) {
-              this.$router.push({
-                name: name,
-                query: {
-                  from:this.$route.query.from
-                }
-              });
-            } else {
-              this.$router.push({
-                name: name,
-              });
-            }
-          })
+          util.initRouter(this, queryStr, queryType);
+          if (this.$route.query.from) {
+            this.$router.push({
+              name: "home_index",
+              query: {
+                from: this.$route.query.from
+              }
+            });
+          } else {
+            this.$router.push({
+              name: "home_index",
+            });
+          }
         } else {
           this.loading = false;
         }
@@ -612,9 +609,11 @@ export default {
       });
     },
     indexLogin() {
+      console.log("indexLogin")
       var hrefStr = location.href.split("?")[1];
       var objQuery = this.getQuery()
       var sessionId = objQuery.sessionId || '';
+      console.log(objQuery)
       if (sessionId) {
         getToken({
           sessionId,

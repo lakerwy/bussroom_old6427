@@ -67,7 +67,7 @@
                   <DropdownItem name="changePass">{{
                       $t("changePass")
                     }}</DropdownItem>
-                  <DropdownItem name="loginout" divided>{{
+                  <DropdownItem name="loginout" divided v-show="showLogout">{{
                       $t("logout")
                     }}</DropdownItem>
                 </DropdownMenu>
@@ -142,6 +142,7 @@ export default {
       firstThreeNav: [],
       lastNav: [],
       navType: 1,
+      showLogout: true,
     };
   },
   computed: {
@@ -346,6 +347,10 @@ export default {
   },
   mounted() {
     this.init();
+    if (window.frames.length != window.parent.frames.length) {
+      console.log('在iframe中111');
+      // this.showLogout = false;
+    }
   },
   created() {
     // 显示打开的页面的列表

@@ -307,76 +307,73 @@ export const getTableDataFromArray = (array) => {
 }
 
 util.initRouter = function (vm, s, t) {
-    return new Promise((resolve, reject)=>{
-        const constRoutes = [];
-        const otherRoutes = [];
+    const constRoutes = [];
+    const otherRoutes = [];
 
-        // 404路由需要和动态路由一起加载
-        const otherRouter = [{
-            path: '/*',
-            name: 'error-404',
-            meta: {
-                title: '404-页面不存在'
-            },
-            component: 'error-page/404'
-        }];
-        // 判断用户是否登录
-        let userInfo = window.localStorage.getItem('userInfo')
-        if (!userInfo) {
-            // 未登录
-            return;
-        }
-        if (!vm.$store.state.app.added) {
-            // 第一次加载 读取数据
-            let accessToken = window.localStorage.getItem('accessToken');
-            // 加载菜单
-            axios.get(getMenuList, { headers: { 'accessToken': accessToken } }).then(res => {
-                let menuData = res.result;
-                if (!menuData) {
-                    return;
-                }
-                util.initAllMenuData(constRoutes, menuData);
-                util.initRouterNode(otherRoutes, otherRouter);
-                // 添加所有主界面路由
-                vm.$store.commit('updateAppRouter', constRoutes.filter(item => item.children.length > 0));
-                // 添加全局路由
-                vm.$store.commit('updateDefaultRouter', otherRoutes);
-                // 添加菜单路由
-                util.initMenuData(vm, menuData);
-                // 缓存数据 修改加载标识
-                window.localStorage.setItem('menuData', JSON.stringify(menuData));
-                vm.$store.commit('setAdded', true);
-
-                if (s == 'email') {
-                    if (t == 1) {
-                        vm.$router.push({
-                            name: 'subscribe-manage'
-                        })
-                    } else if (t == 2) {
-                        vm.$router.push({
-                            name: 'subscribe-overview'
-                        })
-                    }
-                    else if (t == 0) {
-                        vm.$router.push({
-                            name: 'subscribe-email'
-                        })
-                    }
-                }
-                resolve(res)
-            });
-        } else {
-            // 读取缓存数据
-            let data = window.localStorage.getItem('menuData');
-            if (!data) {
-                vm.$store.commit('setAdded', false);
+    // 404路由需要和动态路由一起加载
+    const otherRouter = [{
+        path: '/*',
+        name: 'error-404',
+        meta: {
+            title: '404-页面不存在'
+        },
+        component: 'error-page/404'
+    }];
+    // 判断用户是否登录
+    let userInfo = window.localStorage.getItem('userInfo')
+    if (!userInfo) {
+        // 未登录
+        return;
+    }
+    if (!vm.$store.state.app.added) {
+        // 第一次加载 读取数据
+        let accessToken = window.localStorage.getItem('accessToken');
+        // 加载菜单
+        axios.get(getMenuList, { headers: { 'accessToken': accessToken } }).then(res => {
+            let menuData = res.result;
+            if (!menuData) {
                 return;
             }
-            let menuData = JSON.parse(data);
+            util.initAllMenuData(constRoutes, menuData);
+            util.initRouterNode(otherRoutes, otherRouter);
+            // 添加所有主界面路由
+            vm.$store.commit('updateAppRouter', constRoutes.filter(item => item.children.length > 0));
+            // 添加全局路由
+            vm.$store.commit('updateDefaultRouter', otherRoutes);
             // 添加菜单路由
             util.initMenuData(vm, menuData);
+            // 缓存数据 修改加载标识
+            window.localStorage.setItem('menuData', JSON.stringify(menuData));
+            vm.$store.commit('setAdded', true);
+
+            if (s == 'email') {
+                if (t == 1) {
+                    vm.$router.push({
+                        name: 'subscribe-manage'
+                    })
+                } else if (t == 2) {
+                    vm.$router.push({
+                        name: 'subscribe-overview'
+                    })
+                }
+                else if (t == 0) {
+                    vm.$router.push({
+                        name: 'subscribe-email'
+                    })
+                }
+            }
+        });
+    } else {
+        // 读取缓存数据
+        let data = window.localStorage.getItem('menuData');
+        if (!data) {
+            vm.$store.commit('setAdded', false);
+            return;
         }
-    })
+        let menuData = JSON.parse(data);
+        // 添加菜单路由
+        util.initMenuData(vm, menuData);
+    }
 };
 
 // 添加所有顶部导航栏下的菜单路由

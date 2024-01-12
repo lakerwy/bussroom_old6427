@@ -80,7 +80,7 @@
               </div>
               <div class="intro">
                 <p style="margin-top: 8px">
-                  <span class="subtitle">专属客服：</span>{{ userInfo.contact }}
+                  <span class="subtitle">全业务客户顾问：</span>{{ userInfo.contact }}
                 </p>
                 <Poptip trigger="hover" :content="userInfo.contactPhone" placement="bottom" :disabled="contactPhonePop">
                   <p class="second">
@@ -942,6 +942,8 @@ export default {
           });
           let group = res.result;
           this.getByItem(group, group.length - 1);
+        } else {
+          this.loading = false;
         }
       });
 
