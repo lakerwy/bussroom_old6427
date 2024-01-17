@@ -346,19 +346,25 @@ util.initRouter = function (vm, s, t) {
             window.localStorage.setItem('menuData', JSON.stringify(menuData));
             vm.$store.commit('setAdded', true);
 
-            if (s == 'email') {
-                if (t == 1) {
+            if(s){
+                if (s == 'email') {
+                    if (t == 1) {
+                        vm.$router.push({
+                            name: 'subscribe-manage'
+                        })
+                    } else if (t == 2) {
+                        vm.$router.push({
+                            name: 'subscribe-overview'
+                        })
+                    }
+                    else if (t == 0) {
+                        vm.$router.push({
+                            name: 'subscribe-email'
+                        })
+                    }
+                } else {
                     vm.$router.push({
-                        name: 'subscribe-manage'
-                    })
-                } else if (t == 2) {
-                    vm.$router.push({
-                        name: 'subscribe-overview'
-                    })
-                }
-                else if (t == 0) {
-                    vm.$router.push({
-                        name: 'subscribe-email'
+                        name: s
                     })
                 }
             }

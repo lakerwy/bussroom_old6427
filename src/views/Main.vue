@@ -276,6 +276,16 @@ export default {
           name: "change_pass",
         });
       } else if (name == "loginout") {
+        if (window.frames.length != window.parent.frames.length) {
+          console.log('在iframe中111');
+          window.top.postMessage({close:true},'*')
+          return window.parent.top.postMessage({close:true},'*')
+        }
+        try {
+          window.top.postMessage({close:true},'*')
+        } catch(error) {
+          console.log(error)
+        }
         // 退出登录
         let sessionId = localStorage.getItem("sessionId");
         this.$store.commit("setLoading", true);

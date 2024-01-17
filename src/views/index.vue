@@ -383,8 +383,12 @@ export default {
         var queryStr = "";
         var queryType = '';
         if (hrefStr.indexOf("&") != -1) {
-          queryStr = hrefStr.split("&")[1].split("=")[1];
-          queryType = hrefStr.split("&")[2] ? hrefStr.split("&")[2].split("=")[1] : '';
+          var objQuery = this.getQuery()
+          queryStr = objQuery.query? objQuery.query : '';
+          queryType = objQuery.type? objQuery.type : '';
+
+          // queryStr = hrefStr.split("&")[1].split("=")[1];
+          // queryType = hrefStr.split("&")[2] ? hrefStr.split("&")[2].split("=")[1] : '';
         }
         if (res.success) {
           // 避免超过大小限制

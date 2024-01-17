@@ -39,6 +39,8 @@ export default {
 };
 </script>
 <style scoped lang='less'>
+@vw: 19.2vw;
+@vh: 7.8vh;
 .creditRate {
   /deep/ .ivu-card-body {
     background: url("../../assets/benCattle/img_bg.png");
@@ -48,29 +50,46 @@ export default {
     //padding-top: 100px;
     position: relative;
     text-align: center;
+    display: flex;
+    flex-direction: column;
     .img {
       width: 60%;
       height: 60%;
-      margin-top: 100px;
+      margin: 0 auto;
+      margin-top: 80 / @vh;
     }
     .info{
       //display: inline-block;
       margin: 0 auto;
-      width: 800px;
-      height: 100px;
+      width: 40%;
+      height: 5%;
       //border: 1px solid red;
       display: flex;
       .name {
-        margin-top: 80px;
+        margin-top: 80 / @vh;
         text-align: left;
         width: 50%;
-        font-size: 38px;
+        font-size: 38 / @vh;
         color: white;
         display: flex;
         align-items: center;
         img {
-          height: 40px;
-          margin-right: 20px;
+          height: 40 / @vh;
+          margin-right: 20 / @vh;
+        }
+      }
+    }
+  }
+}
+@media (max-height:600px) {
+  .creditRate {
+    /deep/ .ivu-card-body {
+      .img {
+        margin-top: 40 / @vh;
+      }
+      .info {
+        .name {
+          margin-top: 40 / @vh;
         }
       }
     }
