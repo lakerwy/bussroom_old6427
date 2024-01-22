@@ -28,10 +28,10 @@
         <Button type="primary" :loading="checkCodeLoading" @click="submitEditMobile">提交</Button>
       </div>
     </Modal>
-    <Modal title="欢迎进入商务室" v-model="wechatFlag" class-name="wechat" :mask-closable="false" style="text-align: center"
+    <Modal title="欢迎进入商务室" class="wechat" v-model="wechatFlag" class-name="wechat" :mask-closable="false" style="text-align: center;"
            @on-cancel="closeWechat">
       <p>这里是专属于您自己的商务空间，更多移动端服务关注公众号。</p>
-      <img :src="wechatSrc" style="display: block; margin: 0 auto" alt="扫描绑定微信" />
+      <img :src="wechatSrc" style="height: calc(100% - 32px); display: block; margin: 0 auto" alt="扫描绑定微信" />
       <div slot="footer">
         <Button type="primary" @click="closeWechat">关闭</Button>
       </div>
@@ -1196,6 +1196,12 @@ export default {
 
 .imgs-leave-active {
   opacity: 0;
+}
+
+.wechat {
+  /deep/ .ivu-modal-body {
+    height: 49vh;
+  }
 }
 
 </style>
