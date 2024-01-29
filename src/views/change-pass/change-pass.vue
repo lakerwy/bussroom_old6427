@@ -5,7 +5,7 @@
 <template>
   <div>
     <Card class="change-pass">
-      <Tabs value="name1">
+      <Tabs v-model="tabValue">
         <TabPane label="密码设置" name="name1"
           >请与账号管理员联系或联系专属客服为您服务。</TabPane
         >
@@ -122,6 +122,7 @@ export default {
           },
         ],
       },
+      tabValue: 'name1'
     };
   },
   methods: {
@@ -196,5 +197,12 @@ export default {
     },
   },
   mounted() {},
+  activated() {
+    let paramsType = this.$route.params.type;
+    if (paramsType == "edit") {
+        this.tabValue = 'name2'
+    }
+    this.init();
+  },
 };
 </script>

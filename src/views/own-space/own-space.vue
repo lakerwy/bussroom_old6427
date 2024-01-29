@@ -956,6 +956,17 @@
         this.activeName = "第三方账号绑定";
         this.currMenu = "第三方账号绑定";
       }
+      let paramsType = this.$route.params.type;
+      if (paramsType == "social") {
+        this.activeName = "第三方账号绑定";
+        this.currMenu = "第三方账号绑定";
+      } else if(paramsType == "email"){
+        this.activeName = "安全设置";
+        this.currMenu = "安全设置";
+      } else {
+        this.activeName = "基本信息";
+        this.currMenu = "基本信息";
+      }
       this.init();
     },
 

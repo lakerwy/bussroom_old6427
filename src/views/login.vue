@@ -368,9 +368,7 @@ export default {
             domain: domain,
             expires: this.endDate,
           });
-          Cookies.set("popFlag", 1, {
-            expires: this.endDate,
-          });
+          localStorage.setItem("popFlag", 1)
         }
       });
       // 获取用户信息
